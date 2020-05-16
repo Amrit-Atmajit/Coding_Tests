@@ -25,6 +25,15 @@ public class SpellNumberMain {
 
 		n = 13456;
 		System.out.println(NumberFormat.getInstance().format(n) + "='" + SpellNumber.convert(n) + "'");
+		
+		n = 123456;
+		System.out.println(NumberFormat.getInstance().format(n) + "='" + SpellNumber.convert(n) + "'");
+		
+		n = 1234567;
+		System.out.println(NumberFormat.getInstance().format(n) + "='" + SpellNumber.convert(n) + "'");
+		
+		n = 12345678;
+		System.out.println(NumberFormat.getInstance().format(n) + "='" + SpellNumber.convert(n) + "'");
 
 	}
 

@@ -34,7 +34,27 @@ public class SkuCart {
 					int promCount = skuOrder.getQty() / promotionalQty;
 					int genCount = skuOrder.getQty() % promotionalQty;
 					skuOrderPrice = (promCount * skuInventory.get(sku).getPromotionalPrice()) + (genCount * skuInventory.get(sku).getUnitPrice());
-				} 
+				} else if (combinedPromotional != null && !combinedPromotional.equals("") && !skuInventory.get(sku).getSku().equals(combinedPromotionalFlag)) {
+					Optional<SkuOrder> combninedSkuOrder = orderedSkuList.stream().filter(s -> s.getSku().equals(combinedPromotional)).findFirst();
+					int combinedSkuCount = 0;
+					if (combninedSkuOrder.isPresent()) {
+						combinedSkuCount = combninedSkuOrder.get().getQty();
+					}
+					
+					if (combinedSkuCount < skuOrder.getQty()) {
+						skuOrderPrice = (combinedSkuCount * skuInventory.get(sku).getCombinedPromotionPrice()) 
+								+ ((skuOrder.getQty() - combinedSkuCount) * skuInventory.get(sku).getUnitPrice());
+					} else if (combinedSkuCount > skuOrder.getQty()) {
+						skuOrderPrice = (skuOrder.getQty() * skuInventory.get(sku).getCombinedPromotionPrice()) 
+								+ ((skuOrder.getQty() - combinedSkuCount) * skuInventory.get(combninedSkuOrder.get()).getUnitPrice());
+					} else {
+						skuOrderPrice = skuOrder.getQty() * skuInventory.get(sku).getCombinedPromotionPrice();
+					}
+					
+					combinedPromotionalFlag = combinedPromotional;
+				} else if (promotionalQty == 0 && (combinedPromotional == null || combinedPromotional.equals(""))) {
+					skuOrderPrice = skuOrder.getQty() * skuInventory.get(sku).getUnitPrice();
+				}
 			}
 			
 		}
